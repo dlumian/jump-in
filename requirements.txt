@@ -1,0 +1,7 @@
+flask
+click
+jupyterlab
+conda
+subprocess
+os
+sys

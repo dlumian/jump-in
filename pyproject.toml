@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "coding-setup-tool"
+version = "0.1.0"
+description = "A command-line tool to launch coding setups with VS Code, Jupyter Lab, and Conda."
+authors = [{ name = "Your Name", email = "your.email@example.com" }]
+license = { text = "MIT" }
+dependencies = [
+    "click",  # For CLI handling
+]
+
+[project.scripts]
+coding-setup = "coding_setup_tool.src.main:main"
