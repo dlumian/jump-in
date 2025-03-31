@@ -1,7 +1,7 @@
 import argparse
-import os
 import subprocess
 from config import load_config
+from utils import run_command
 
 def launch_vscode(directory):
     subprocess.run(['code', directory])
