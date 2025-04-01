@@ -1,35 +1,123 @@
 {
-  "meta": {
-    "default_directory": "."
+  "basic_tests": {
+    "default_directory": ".",
+    "steps": [
+      {
+        "description": "Report current Python version",
+        "command": ["python", "--version"],
+        "use_shell": false,
+        "ignore_errors": true
+      },
+      {
+        "description": "Report current Conda version",
+        "command": ["conda", "--version"],
+        "use_shell": false,
+        "ignore_errors": true,
+        "directory": "."
+      },
+      {
+        "description": "Report current shell",
+        "command": ["echo", "$SHELL"],
+        "use_shell": false,
+        "ignore_errors": true
+      },
+      {
+        "description": "Report current working directory",
+        "command": ["pwd"],
+        "use_shell": false,
+        "ignore_errors": true,
+        "directory": "."
+      },
+      {
+        "description": "Open a new iTerm session",
+        "command": ["open", "-n", "/Applications/iTerm.app"],
+        "use_shell": false,
+        "ignore_errors": true,
+        "directory": "."
+      },
+      {
+        "description": "Test error handling-ignore",
+        "command": ["report", "me", "an", "error!"],
+        "use_shell": false,
+        "ignore_errors": true,
+        "directory": "."
+      }
+    ]
   },
-  "test": [
-    {
-      "description": "Run unit tests",
-      "command": ["pytest", "tests/"],
-      "use_shell": false,
-      "ignore_errors": false,
-      "directory": "./tests"
-    },
-    {
-      "description": "Check code formatting",
-      "command": ["black", "--check", "."],
-      "use_shell": false,
-      "ignore_errors": true
-    }
-  ],
-  "prod": [
-    {
-      "description": "Activate Conda environment and start Jupyter Lab",
-      "command": "conda activate myenv && jupyter lab",
-      "use_shell": true,
-      "ignore_errors": false
-    },
-    {
-      "description": "Deploy application",
-      "command": ["deploy_tool", "--env", "prod"],
-      "use_shell": false,
-      "ignore_errors": false,
-      "directory": "./deployment"
-    }
-  ]
+  "error_raising": {
+    "default_directory": ".",
+    "steps": [
+      {
+        "description": "Test error handling-raise",
+        "command": ["give", "me", "an", "error!"],
+        "use_shell": false,
+        "ignore_errors": false,
+        "directory": "."
+      }
+    ]
+  },
+  "lab": {
+    "default_directory": ".",
+    "steps": [
+      {
+        "description": "Open a new iTerm session",
+        "command": "osascript -e 'tell application \"iTerm\" to create window with default profile'",
+        "use_shell": true,
+        "ignore_errors": false,
+        "directory": "."
+      },
+      {
+        "description": "Activate Conda environment",
+        "command": "conda activate <your-env-name>",
+        "use_shell": true,
+        "ignore_errors": false,
+        "directory": "."
+      },
+      {
+        "description": "Start Jupyter Notebook",
+        "command": "jupyter notebook",
+        "use_shell": true,
+        "ignore_errors": false,
+        "directory": "."
+      },
+      {
+        "description": "Start VS Code in the directory",
+        "command": "code .",
+        "use_shell": true,
+        "ignore_errors": false,
+        "directory": "."
+      }
+    ]
+  },
+  "test": {
+    "default_directory": ".",
+    "steps": [
+      {
+        "description": "Run pytest",
+        "command": "pytest",
+        "use_shell": false,
+        "ignore_errors": false,
+        "directory": "."
+      },
+      {
+        "description": "Run black for code formatting",
+        "command": "black .",
+        "use_shell": false,
+        "ignore_errors": false,
+        "directory": "."
+      }
+    ]
+  },
+  "prod": {
+    "default_directory": ".",
+    "steps": [
+      {
+        "description": "Placeholder for production commands",
+        "command": "echo 'Production commands will be added here'",
+        "use_shell": false,
+        "ignore_errors": false,
+        "directory": "."
+      }
+    ]
+  }
 }

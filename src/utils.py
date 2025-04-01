@@ -51,23 +51,30 @@ def run_command(command, use_shell=False, timeout=None, ignore_errors=False, dir
         if not ignore_errors:
             raise
 
-def execute_steps_from_json(json_file, section):
+def execute_steps_from_json(json_file, section_key):
     try:
+        print(f"Jumping into: {json_file}.")
+        print(f"Running setup for: {section_key}.\n")
+
         # Load the JSON file
-        with open(json_file, "r") as file:
-            data = json.load(file)
+        with open(json_file, "r") as f:
+            data = json.load(f)
 
-        # Get the meta section for default settings
-        meta = data.get("meta", {})
-        default_directory = meta.get("default_directory", ".")
+        setup_details = data.get(section_key)
+        if not setup_details:
+            raise ValueError(f"Section '{section_key}' not found in the JSON file.")
 
-        # Get the selected section
-        steps = data.get(section)
+        steps = setup_details.get("steps")
         if not steps:
-            raise ValueError(f"Section '{section}' not found in the JSON file.")
+            raise ValueError(f"Steps not defined in '{section_key}'.")
+
+        # Get the default directory
+        default_directory = setup_details.get("default_directory", ".")
+        if not default_directory:
+            default_directory = os.getcwd()
 
         # Iterate through the steps in the selected section
-        for step in steps:
+        for cnt, step in enumerate(steps):
             description = step.get("description", "No description provided")
             command = step.get("command")
             use_shell = step.get("use_shell", False)
@@ -75,12 +82,12 @@ def execute_steps_from_json(json_file, section):
             ignore_errors = step.get("ignore_errors", False)
             directory = step.get("directory", default_directory)
 
-            print(f"Step: {description}")
+            print(f"Step {cnt}: {description}")
             print(f"Running command: {command} in directory: {directory}")
 
             # Run the command
             run_command(command, use_shell=use_shell, timeout=timeout, ignore_errors=ignore_errors, directory=directory)
-            print(f"Step completed: {description}\n")
+            print(f"Step {cnt} completed: {description}\n")
     except FileNotFoundError:
         print(f"Error: JSON file '{json_file}' not found.")
     except json.JSONDecodeError:
@@ -90,6 +97,7 @@ def execute_steps_from_json(json_file, section):
     except Exception as e:
         print(f"An unexpected error occurred while executing steps: {str(e)}")
 
-
 if __name__ == "__main__":
-    execute_steps_from_json("commands.json")
+    json_path = './../configs/commands.json'
+    section_key = 'basic_tests'
+    execute_steps_from_json(json_path, section_key)
