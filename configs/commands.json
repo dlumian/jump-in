@@ -1,0 +1,30 @@
+{
+  "test": [
+    {
+      "description": "Run unit tests",
+      "command": ["pytest", "tests/"],
+      "use_shell": false,
+      "ignore_errors": false
+    },
+    {
+      "description": "Check code formatting",
+      "command": ["black", "--check", "."],
+      "use_shell": false,
+      "ignore_errors": true
+    }
+  ],
+  "prod": [
+    {
+      "description": "Activate Conda environment and start Jupyter Lab",
+      "command": "conda activate myenv && jupyter lab",
+      "use_shell": true,
+      "ignore_errors": false
+    },
+    {
+      "description": "Deploy application",
+      "command": ["deploy_tool", "--env", "prod"],
+      "use_shell": false,
+      "ignore_errors": false
+    }
+  ]
+}
