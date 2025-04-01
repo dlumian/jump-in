@@ -1,10 +1,14 @@
 {
+  "meta": {
+    "default_directory": "."
+  },
   "test": [
     {
       "description": "Run unit tests",
       "command": ["pytest", "tests/"],
       "use_shell": false,
-      "ignore_errors": false
+      "ignore_errors": false,
+      "directory": "./tests"
     },
     {
       "description": "Check code formatting",
@@ -24,7 +28,8 @@
       "description": "Deploy application",
       "command": ["deploy_tool", "--env", "prod"],
       "use_shell": false,
-      "ignore_errors": false
+      "ignore_errors": false,
+      "directory": "./deployment"
     }
   ]
 }

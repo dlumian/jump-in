@@ -1,12 +1,15 @@
+import os
 import json
 import shlex
 import subprocess
 
-def run_command(command, use_shell=False, timeout=None, ignore_errors=False):
+def run_command(command, use_shell=False, timeout=None, ignore_errors=False, directory=None):
     try:
+        # Use the specified directory or default to the current working directory
+        cwd = directory or os.getcwd()
+
         # Run the command
         if use_shell:
-            # If use_shell is True, the command must be a string
             safe_command = shlex.quote(command)
             result = subprocess.run(
                 safe_command,
@@ -15,10 +18,10 @@ def run_command(command, use_shell=False, timeout=None, ignore_errors=False):
                 stderr=subprocess.PIPE,
                 text=True,
                 timeout=timeout,
-                check=True  # Raise an exception for non-zero exit codes
+                check=True,
+                cwd=cwd  # Set the working directory
             )
         else:
-            # If use_shell is False, the command must be a list
             result = subprocess.run(
                 command,
                 shell=False,
@@ -26,9 +29,9 @@ def run_command(command, use_shell=False, timeout=None, ignore_errors=False):
                 stderr=subprocess.PIPE,
                 text=True,
                 timeout=timeout,
-                check=True
+                check=True,
+                cwd=cwd  # Set the working directory
             )
-        # Print the command's output if successful
         print(result.stdout)
     except FileNotFoundError:
         print(f"Error: Command not found: {command}")
@@ -54,6 +57,10 @@ def execute_steps_from_json(json_file, section):
         with open(json_file, "r") as file:
             data = json.load(file)
 
+        # Get the meta section for default settings
+        meta = data.get("meta", {})
+        default_directory = meta.get("default_directory", ".")
+
         # Get the selected section
         steps = data.get(section)
         if not steps:
@@ -66,12 +73,13 @@ def execute_steps_from_json(json_file, section):
             use_shell = step.get("use_shell", False)
             timeout = step.get("timeout")
             ignore_errors = step.get("ignore_errors", False)
+            directory = step.get("directory", default_directory)
 
             print(f"Step: {description}")
-            print(f"Running command: {command}")
+            print(f"Running command: {command} in directory: {directory}")
 
             # Run the command
-            run_command(command, use_shell=use_shell, timeout=timeout, ignore_errors=ignore_errors)
+            run_command(command, use_shell=use_shell, timeout=timeout, ignore_errors=ignore_errors, directory=directory)
             print(f"Step completed: {description}\n")
     except FileNotFoundError:
         print(f"Error: JSON file '{json_file}' not found.")
