@@ -1,6 +1,10 @@
 {
   "basic_tests": {
-    "default_directory": ".",
+    "defaults": {
+      "directory": ".",
+      "env": "EmoFace",
+      "conda": "/opt/anaconda3/bin/conda"
+    },
     "steps": [
       {
         "description": "Report current Python version",
@@ -30,10 +34,24 @@
       },
       {
         "description": "Open a new iTerm session",
-        "command": ["open", "-n", "/Applications/iTerm.app"],
+          "command": 
+          [
+            "osascript",
+            "-e",
+            "tell application \"iTerm\"",
+            "-e",
+            "    create window with default profile",
+            "-e",
+            "    tell current session of current window",
+            "-e",
+            "        write text \"source /opt/anaconda3/etc/profile.d/conda.sh && conda activate EmoFace && cd /Users/dsl/Documents/GitHub/EmotionFaceClassifier\"",
+            "-e",
+            "    end tell",
+            "-e",
+            "end tell"
+        ],
         "use_shell": false,
-        "ignore_errors": true,
-        "directory": "."
+        "ignore_errors": true
       },
       {
         "description": "Test error handling-ignore",
