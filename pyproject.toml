@@ -1,16 +1,25 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=42", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "coding-setup-tool"
+name = "jump-in"
 version = "0.1.0"
-description = "A command-line tool to launch coding setups with VS Code, Jupyter Lab, and Conda."
-authors = [{ name = "Your Name", email = "your.email@example.com" }]
-license = { text = "MIT" }
+description = "A utility to execute commands and steps from JSON configuration files."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [
+    { name = "dsl", email = "jumpinpython@gmail.com" }
+]
+keywords = ["automation", "commands", "json", "subprocess"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
 dependencies = [
-    "click",  # For CLI handling
+    "shlex"  # For safely parsing shell commands
 ]
 
 [project.scripts]
-coding-setup = "coding_setup_tool.src.main:main"
+jump-in = "main:main"

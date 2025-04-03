@@ -62,8 +62,7 @@
       }
     ]
   },
-  "error_raising": {
-    "default_directory": ".",
+  "raise_error": {
     "steps": [
       {
         "description": "Test error handling-raise",
@@ -74,67 +73,22 @@
       }
     ]
   },
-  "lab": {
-    "default_directory": ".",
-    "steps": [
-      {
-        "description": "Open a new iTerm session",
-        "command": "osascript -e 'tell application \"iTerm\" to create window with default profile'",
-        "use_shell": true,
-        "ignore_errors": false,
-        "directory": "."
-      },
-      {
-        "description": "Activate Conda environment",
-        "command": "conda activate <your-env-name>",
-        "use_shell": true,
-        "ignore_errors": false,
-        "directory": "."
-      },
-      {
-        "description": "Start Jupyter Notebook",
-        "command": "jupyter notebook",
-        "use_shell": true,
-        "ignore_errors": false,
-        "directory": "."
-      },
-      {
-        "description": "Start VS Code in the directory",
-        "command": "code .",
-        "use_shell": true,
-        "ignore_errors": false,
-        "directory": "."
-      }
-    ]
-  },
-  "test": {
-    "default_directory": ".",
+  "python_tests": {
+    "defaults": {
+      "directory": "/Users/dsl/Documents/GitHub/jump-in"
+    },
     "steps": [
       {
         "description": "Run pytest",
         "command": "pytest",
         "use_shell": false,
-        "ignore_errors": false,
-        "directory": "."
+        "ignore_errors": false
       },
       {
         "description": "Run black for code formatting",
         "command": "black .",
         "use_shell": false,
-        "ignore_errors": false,
-        "directory": "."
-      }
-    ]
-  },
-  "prod": {
-    "default_directory": ".",
-    "steps": [
-      {
-        "description": "Placeholder for production commands",
-        "command": "echo 'Production commands will be added here'",
-        "use_shell": false,
-        "ignore_errors": false,
-        "directory": "."
+        "ignore_errors": false
       }
     ]
   }

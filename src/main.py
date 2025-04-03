@@ -1,31 +1,25 @@
 import argparse
-import subprocess
-from config import load_config
-from utils import run_command
-
-def launch_vscode(directory):
-    subprocess.run(['code', directory])
-
-def launch_jupyter_lab(directory):
-    subprocess.run(['jupyter', 'lab', '--notebook-dir', directory])
+from utils import execute_steps_from_json
 
 def main():
-    parser = argparse.ArgumentParser(description='Launch coding setup.')
-    parser.add_argument('--directory', type=str, help='Directory to launch the coding setup in.')
-    parser.add_argument('--conda-env', type=str, help='Conda environment to activate.')
+    # Set up argument parsing
+    parser = argparse.ArgumentParser(description="Execute steps from a JSON configuration file.")
+    parser.add_argument(
+        "json_file",
+        type=str,
+        help="Path to the JSON configuration file."
+    )
+    parser.add_argument(
+        "section_key",
+        type=str,
+        help="Key of the section in the JSON file to execute."
+    )
 
+    # Parse the arguments
     args = parser.parse_args()
 
-    config = load_config()
+    # Execute the steps from the JSON file
+    execute_steps_from_json(json_file=args.json_file, section_key=args.section_key)
 
-    directory = args.directory if args.directory else config['default_directory']
-    conda_env = args.conda_env if args.conda_env else config['default_conda_env']
-
-    if conda_env:
-        activate_conda_env(conda_env)
-
-    launch_vscode(directory)
-    launch_jupyter_lab(directory)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -7,7 +7,6 @@ def run_command(command, use_shell=False, timeout=None, ignore_errors=False, dir
     try:
         # Use the specified directory or default to the current working directory
         cwd = directory or os.getcwd()
-
         # Run the command
         if use_shell:
             safe_command = shlex.quote(command)
@@ -136,4 +135,4 @@ def replace_with_dict(input_data, replacements, open_symbol="{{", close_symbol="
 if __name__ == "__main__":
     json_path = './../configs/commands.json'
     section_key = 'basic_tests'
-    execute_steps_from_json(json_path, section_key)
+    execute_steps_from_json(json_file=json_path, section_key=section_key)
