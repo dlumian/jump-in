@@ -1,44 +1,27 @@
-import unittest
-from unittest.mock import patch, MagicMock
-import sys
+"""
+Unit tests for the main.py script.
+
+These tests validate the behavior of the main function and its integration with utils.py.
+"""
 import os
+print(os.cwd())
 
-class TestMain(unittest.TestCase):
+from datascifuncs.tools import check_directory_name
+target_name = "jump-in"
+check_directory_name(target_name=target_name)
+print(os.cwd())
+import pytest
+from unittest.mock import patch
+from main import main
 
-    @patch('src.main.launch_vscode')
-    @patch('src.main.launch_jupyter')
-    @patch('src.main.activate_conda_env')
-    def test_launch_setup(self, mock_activate, mock_launch_jupyter, mock_launch_vscode):
-        # Simulate command line arguments
-        sys.argv = ['main.py', '--directory', '/path/to/project', '--env', 'myenv']
-        
-        # Import the main module after setting sys.argv
-        import src.main
-        
-        # Check if the conda environment activation was called
-        mock_activate.assert_called_once_with('myenv')
-        
-        # Check if VS Code and Jupyter Lab were launched
-        mock_launch_vscode.assert_called_once_with('/path/to/project')
-        mock_launch_jupyter.assert_called_once_with('/path/to/project')
-
-    @patch('src.main.launch_vscode')
-    @patch('src.main.launch_jupyter')
-    @patch('src.main.activate_conda_env')
-    def test_default_setup(self, mock_activate, mock_launch_jupyter, mock_launch_vscode):
-        # Simulate command line arguments with defaults
-        sys.argv = ['main.py']
-        
-        # Import the main module after setting sys.argv
-        import src.main
-        
-        # Check if the default conda environment activation was called
-        mock_activate.assert_called_once_with('base')
-        
-        # Check if VS Code and Jupyter Lab were launched in the current directory
-        current_directory = os.getcwd()
-        mock_launch_vscode.assert_called_once_with(current_directory)
-        mock_launch_jupyter.assert_called_once_with(current_directory)
-
-if __name__ == '__main__':
-    unittest.main()
+@patch("argparse.ArgumentParser.parse_args")
+@patch("utils.execute_steps_from_json")
+def test_main(mock_execute_steps_from_json, mock_parse_args):
+    """
+    Test the main function to ensure it parses arguments and calls execute_steps_from_json.
+    """
+    mock_parse_args.return_value = argparse.Namespace(
+        json_file="mock_file.json", section_key="test_section"
+    )
+    main()
+    mock_execute_steps_from_json.assert_called_once_with("mock_file.json", "test_section")
